@@ -1,0 +1,41 @@
+# Build artifacts
+main
+*.exe
+*.o
+*.obj
+*.dll
+*.so
+*.dylib
+
+# Temporary files
+*.tmp
+*.temp
+*~
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Documentation build files
+docs/
+
+# Output files
+frequency.dat
+
+# Log files
+*.log
+
+# Backup files
+*.bak
+*.backup 

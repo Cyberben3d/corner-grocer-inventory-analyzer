@@ -1,0 +1,127 @@
+# Doxyfile configuration for Corner Grocer project
+
+# Project information
+PROJECT_NAME           = "Corner Grocer Inventory Analyzer"
+PROJECT_NUMBER         = 1.0
+PROJECT_BRIEF         = "Inventory analyzer for Corner Grocer"
+OUTPUT_DIRECTORY      = docs
+CREATE_SUBDIRS        = YES
+OUTPUT_LANGUAGE       = English
+BRIEF_MEMBER_DESC     = YES
+REPEAT_BRIEF          = YES
+ABBREVIATE_BRIEF      = "The $name class" \
+                       "The $name widget" \
+                       "The $name file" \
+                       is \
+                       provides \
+                       specifies \
+                       contains \
+                       represents \
+                       a \
+                       an \
+                       the
+
+# Input settings
+INPUT                  = .
+FILE_PATTERNS         = *.cpp *.h
+RECURSIVE             = YES
+EXTRACT_ALL           = YES
+EXTRACT_PRIVATE       = YES
+EXTRACT_STATIC        = YES
+EXTRACT_LOCAL_CLASSES = YES
+
+# Output settings
+GENERATE_HTML         = YES
+GENERATE_LATEX        = NO
+HTML_OUTPUT          = html
+HTML_FILE_EXTENSION  = .html
+HTML_HEADER          =
+HTML_FOOTER          =
+HTML_STYLESHEET      =
+HTML_EXTRA_STYLESHEET =
+HTML_EXTRA_FILES     =
+HTML_COLORSTYLE_HUE  = 220
+HTML_COLORSTYLE_SAT  = 100
+HTML_COLORSTYLE_GAMMA = 80
+HTML_DYNAMIC_MENUS   = YES
+HTML_DYNAMIC_SECTIONS = NO
+
+# Diagram settings
+HAVE_DOT             = NO
+HIDE_UNDOC_RELATIONS = YES
+CLASS_GRAPH          = YES
+COLLABORATION_GRAPH  = YES
+UML_LOOK            = NO
+UML_LIMIT_NUM_FIELDS = 50
+TEMPLATE_RELATIONS   = NO
+INCLUDE_GRAPH        = YES
+INCLUDED_BY_GRAPH    = YES
+CALL_GRAPH          = NO
+CALLER_GRAPH        = NO
+GRAPHICAL_HIERARCHY  = YES
+DIRECTORY_GRAPH      = YES
+DIR_GRAPH_MAX_DEPTH  = 1
+
+# Preprocessor settings
+ENABLE_PREPROCESSING = YES
+MACRO_EXPANSION     = YES
+EXPAND_ONLY_PREDEF  = NO
+SEARCH_INCLUDES     = YES
+INCLUDE_PATH        =
+INCLUDE_FILE_PATTERNS =
+PREDEFINED         =
+EXPAND_AS_DEFINED  =
+SKIP_FUNCTION_MACROS = YES
+
+# Source code settings
+SOURCE_BROWSER       = YES
+INLINE_SOURCES      = NO
+STRIP_CODE_COMMENTS = NO
+REFERENCED_BY_RELATION = YES
+REFERENCES_RELATION = YES
+REFERENCES_LINK_SOURCE = YES
+SOURCE_TOOLTIPS     = YES
+USE_HTAGS          = NO
+VERBATIM_HEADERS   = YES
+
+# Index settings
+ALPHABETICAL_INDEX  = YES
+IGNORE_PREFIX      =
+
+# LaTeX settings
+GENERATE_LATEX      = NO
+
+# RTF settings
+GENERATE_RTF        = NO
+
+# Man page settings
+GENERATE_MAN        = NO
+
+# XML settings
+GENERATE_XML        = NO
+
+# DocBook settings
+GENERATE_DOCBOOK    = NO
+
+# AutoGen definitions settings
+GENERATE_AUTOGEN_DEF = NO
+
+# Perl module settings
+GENERATE_PERLMOD    = NO
+
+# Configuration options related to external references
+TAGFILES           =
+GENERATE_TAGFILE   =
+ALLEXTERNALS       = NO
+EXTERNAL_GROUPS    = YES
+EXTERNAL_PAGES     = YES
+
+# Configuration options related to the dot tool
+DOT_IMAGE_FORMAT   = png
+DOT_PATH           =
+DOTFILE_DIRS       =
+DOT_GRAPH_MAX_NODES = 100
+MAX_DOT_GRAPH_DEPTH = 0
+DOT_MULTI_TARGETS  = NO
+GENERATE_LEGEND    = YES
+DOT_CLEANUP        = YES 
