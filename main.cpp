@@ -514,6 +514,12 @@ public:
         } else {
             // Try capitalizing the first letter of the item (peas -> Peas) (case-insensitive)
             item[0] = std::toupper(item[0]);
+            
+            // Also make the rest of the item lowercase (PEAS -> Peas)
+            // Fixes issue #1: "Item not found" when searching for APPLES
+            for (size_t i = 1; i < item.length(); i++) {
+                item[i] = std::tolower(item[i]);
+            }
             it = m_itemCounts.find(item);
             if (it != m_itemCounts.end()) {
                 t_count = it->second;
