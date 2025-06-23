@@ -1,5 +1,7 @@
 # Corner Grocer Inventory Analyzer
 
+\mainpage
+
 A C++ application for analyzing grocery store inventory data, developed by Benjamin Orona for Chada Tech.
 
 ## Features
