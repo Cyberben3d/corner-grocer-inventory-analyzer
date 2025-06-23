@@ -24,7 +24,7 @@ ABBREVIATE_BRIEF      = "The $name class" \
 # Input settings
 INPUT                  = .
 USE_MDFILE_AS_MAINPAGE = README.md
-FILE_PATTERNS         = *.cpp *.h
+FILE_PATTERNS         = *.cpp *.h *.md
 RECURSIVE             = YES
 EXTRACT_ALL           = YES
 EXTRACT_PRIVATE       = YES
