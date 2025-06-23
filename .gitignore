@@ -7,6 +7,7 @@ main.exe
 *.out
 
 # Doxygen generated files (we'll commit the HTML docs but ignore other formats)
+docs/html/
 docs/latex/
 docs/man/
 docs/rtf/
