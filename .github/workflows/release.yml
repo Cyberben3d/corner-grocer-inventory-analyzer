@@ -5,6 +5,11 @@ on:
     tags:
       - 'v*'  # Trigger on version tags like v1.0.0
 
+# Add permissions for creating releases and uploading assets
+permissions:
+  contents: write
+  actions: read
+
 jobs:
   create-release:
     runs-on: ubuntu-latest
