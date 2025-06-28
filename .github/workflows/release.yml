@@ -6,7 +6,49 @@ on:
       - 'v*'  # Trigger on version tags like v1.0.0
 
 jobs:
+  create-release:
+    runs-on: ubuntu-latest
+    outputs:
+      upload_url: ${{ steps.create_release.outputs.upload_url }}
+    
+    steps:
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: Corner Grocer Inventory Analyzer ${{ github.ref_name }}
+        body: |
+          ## Corner Grocer Inventory Analyzer
+          
+          A C++ application for analyzing grocery store inventory data.
+          
+          ### Features
+          - Item search functionality
+          - Numerical display of all items
+          - Visual histogram display with color coding
+          - Automatic data persistence
+          
+          ### Downloads
+          Platform-specific packages will be automatically attached to this release.
+          
+          ### Quick Start
+          1. Download the package for your platform
+          2. Extract the zip file
+          3. Run the executable: `./main` (macOS/Linux) or `main.exe` (Windows)
+          
+          ### Documentation
+          Full documentation available at: https://cyberben3d.github.io/corner-grocer-inventory-analyzer
+          
+          ---
+          *Developed by Benjamin Orona, Chada Tech*
+        draft: false
+        prerelease: false
+
   build-and-release:
+    needs: create-release
     runs-on: ${{ matrix.os }}
     
     strategy:
@@ -62,7 +104,7 @@ jobs:
         } else {
           Write-Host "No executable found"
           exit 1
-        fi
+        }
     
     - name: Check for input file (Unix)
       if: matrix.os != 'windows-latest'
@@ -85,7 +127,7 @@ jobs:
         } else {
           Write-Host "Input file not found"
           exit 1
-        fi
+        }
     
     - name: Create release package
       run: |
@@ -124,48 +166,4 @@ jobs:
         upload_url: ${{ needs.create-release.outputs.upload_url }}
         asset_path: ./corner-grocer-${{ matrix.os }}.zip
         asset_name: corner-grocer-${{ matrix.os }}.zip
-        asset_content_type: application/zip
-
-  create-release:
-    needs: build-and-release
-    runs-on: ubuntu-latest
-    outputs:
-      upload_url: ${{ steps.create_release.outputs.upload_url }}
-    
-    steps:
-    - name: Create Release
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: ${{ github.ref }}
-        release_name: Corner Grocer Inventory Analyzer ${{ github.ref_name }}
-        body: |
-          ## Corner Grocer Inventory Analyzer
-          
-          A C++ application for analyzing grocery store inventory data.
-          
-          ### Features
-          - Item search functionality
-          - Numerical display of all items
-          - Visual histogram display with color coding
-          - Automatic data persistence
-          
-          ### Downloads
-          - **Windows**: Download `corner-grocer-windows-latest.zip`
-          - **macOS**: Download `corner-grocer-macos-latest.zip`
-          - **Linux**: Download `corner-grocer-ubuntu-latest.zip`
-          
-          ### Quick Start
-          1. Download the package for your platform
-          2. Extract the zip file
-          3. Run the executable: `./main` (macOS/Linux) or `main.exe` (Windows)
-          
-          ### Documentation
-          Full documentation available at: https://cyberben3d.github.io/corner-grocer-inventory-analyzer
-          
-          ---
-          *Developed by Benjamin Orona, Chada Tech*
-        draft: false
-        prerelease: false 
+        asset_content_type: application/zip 
