@@ -1,0 +1,103 @@
+name: Build and Test
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        compiler: [gcc, clang]
+        exclude:
+          - os: windows-latest
+            compiler: clang  # Skip clang on Windows for simplicity
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Install dependencies (Ubuntu)
+      if: matrix.os == 'ubuntu-latest'
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y g++ clang
+    
+    - name: Install dependencies (macOS)
+      if: matrix.os == 'macos-latest'
+      run: |
+        xcode-select --install || true
+    
+    - name: Install dependencies (Windows)
+      if: matrix.os == 'windows-latest'
+      run: |
+        # Windows typically comes with MSVC, but we'll use MinGW for consistency
+        # This is a simplified version - in practice you might want to use a more robust setup
+        echo "Using system compiler on Windows"
+    
+    - name: Set compiler (GCC)
+      if: matrix.compiler == 'gcc'
+      run: |
+        echo "Using GCC compiler"
+        g++ --version
+    
+    - name: Set compiler (Clang)
+      if: matrix.compiler == 'clang'
+      run: |
+        echo "Using Clang compiler"
+        clang++ --version
+    
+    - name: Compile with GCC
+      if: matrix.compiler == 'gcc'
+      run: |
+        g++ -std=c++11 -Wall -Wextra -pedantic -o main main.cpp
+        echo "Compilation successful with GCC"
+    
+    - name: Compile with Clang
+      if: matrix.compiler == 'clang'
+      run: |
+        clang++ -std=c++11 -Wall -Wextra -pedantic -o main main.cpp
+        echo "Compilation successful with Clang"
+    
+    - name: Test compilation output
+      run: |
+        if [ -f "main" ]; then
+          echo "✓ Executable created successfully"
+          ls -la main
+        elif [ -f "main.exe" ]; then
+          echo "✓ Executable created successfully (Windows)"
+          ls -la main.exe
+        else
+          echo "✗ No executable found"
+          exit 1
+        fi
+    
+    - name: Check for input file
+      run: |
+        if [ -f "CS210_Project_Three_Input_File.txt" ]; then
+          echo "✓ Input file found"
+          wc -l CS210_Project_Three_Input_File.txt
+        else
+          echo "✗ Input file not found"
+          exit 1
+        fi
+    
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: build-${{ matrix.os }}-${{ matrix.compiler }}
+        path: |
+          main
+          main.exe
+          main.cpp
+          CS210_Project_Three_Input_File.txt
+          README.md
+          RUN_INSTRUCTIONS.md
+          compile.sh
+          compile.bat
+          Makefile
+        retention-days: 90 

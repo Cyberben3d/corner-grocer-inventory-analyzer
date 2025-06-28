@@ -1,0 +1,148 @@
+name: Create Release
+
+on:
+  push:
+    tags:
+      - 'v*'  # Trigger on version tags like v1.0.0
+
+jobs:
+  build-and-release:
+    runs-on: ${{ matrix.os }}
+    
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        compiler: [gcc]
+        exclude:
+          - os: windows-latest
+            compiler: clang  # Skip clang on Windows for simplicity
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Install dependencies (Ubuntu)
+      if: matrix.os == 'ubuntu-latest'
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y g++
+    
+    - name: Install dependencies (macOS)
+      if: matrix.os == 'macos-latest'
+      run: |
+        xcode-select --install || true
+    
+    - name: Install dependencies (Windows)
+      if: matrix.os == 'windows-latest'
+      run: |
+        echo "Using system compiler on Windows"
+    
+    - name: Compile with GCC
+      run: |
+        g++ -std=c++11 -Wall -Wextra -pedantic -o main main.cpp
+        echo "Compilation successful with GCC"
+    
+    - name: Test compilation output
+      run: |
+        if [ -f "main" ]; then
+          echo "✓ Executable created successfully"
+          ls -la main
+        elif [ -f "main.exe" ]; then
+          echo "✓ Executable created successfully (Windows)"
+          ls -la main.exe
+        else
+          echo "✗ No executable found"
+          exit 1
+        fi
+    
+    - name: Check for input file
+      run: |
+        if [ -f "CS210_Project_Three_Input_File.txt" ]; then
+          echo "✓ Input file found"
+          wc -l CS210_Project_Three_Input_File.txt
+        else
+          echo "✗ Input file not found"
+          exit 1
+        fi
+    
+    - name: Create release package
+      run: |
+        # Create platform-specific package
+        if [ "${{ matrix.os }}" = "windows-latest" ]; then
+          PACKAGE_NAME="corner-grocer-windows"
+          EXECUTABLE="main.exe"
+        else
+          PACKAGE_NAME="corner-grocer-${{ matrix.os }}"
+          EXECUTABLE="main"
+        fi
+        
+        # Create package directory
+        mkdir -p $PACKAGE_NAME
+        
+        # Copy all necessary files
+        cp $EXECUTABLE $PACKAGE_NAME/
+        cp main.cpp $PACKAGE_NAME/
+        cp CS210_Project_Three_Input_File.txt $PACKAGE_NAME/
+        cp README.md $PACKAGE_NAME/
+        cp RUN_INSTRUCTIONS.md $PACKAGE_NAME/
+        cp compile.sh $PACKAGE_NAME/
+        cp compile.bat $PACKAGE_NAME/
+        cp Makefile $PACKAGE_NAME/
+        
+        # Create zip file
+        zip -r $PACKAGE_NAME.zip $PACKAGE_NAME/
+        
+        echo "Package created: $PACKAGE_NAME.zip"
+    
+    - name: Upload release asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ needs.create-release.outputs.upload_url }}
+        asset_path: ./corner-grocer-${{ matrix.os }}.zip
+        asset_name: corner-grocer-${{ matrix.os }}.zip
+        asset_content_type: application/zip
+
+  create-release:
+    needs: build-and-release
+    runs-on: ubuntu-latest
+    outputs:
+      upload_url: ${{ steps.create_release.outputs.upload_url }}
+    
+    steps:
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: Corner Grocer Inventory Analyzer ${{ github.ref_name }}
+        body: |
+          ## Corner Grocer Inventory Analyzer
+          
+          A C++ application for analyzing grocery store inventory data.
+          
+          ### Features
+          - Item search functionality
+          - Numerical display of all items
+          - Visual histogram display with color coding
+          - Automatic data persistence
+          
+          ### Downloads
+          - **Windows**: Download `corner-grocer-windows-latest.zip`
+          - **macOS**: Download `corner-grocer-macos-latest.zip`
+          - **Linux**: Download `corner-grocer-ubuntu-latest.zip`
+          
+          ### Quick Start
+          1. Download the package for your platform
+          2. Extract the zip file
+          3. Run the executable: `./main` (macOS/Linux) or `main.exe` (Windows)
+          
+          ### Documentation
+          Full documentation available at: https://cyberben3d.github.io/corner-grocer-inventory-analyzer
+          
+          ---
+          *Developed by Benjamin Orona, Chada Tech*
+        draft: false
+        prerelease: false 
