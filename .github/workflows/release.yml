@@ -164,7 +164,7 @@ jobs:
       shell: pwsh
       run: |
         # Create platform-specific package
-        $PACKAGE_NAME = "corner-grocer-windows"
+        $PACKAGE_NAME = "corner-grocer-windows-latest"
         $EXECUTABLE = "main.exe"
         
         # Create package directory
