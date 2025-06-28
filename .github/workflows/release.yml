@@ -41,26 +41,49 @@ jobs:
         g++ -std=c++11 -Wall -Wextra -pedantic -o main main.cpp
         echo "Compilation successful with GCC"
     
-    - name: Test compilation output
+    - name: Test compilation output (Unix)
+      if: matrix.os != 'windows-latest'
       run: |
         if [ -f "main" ]; then
-          echo "✓ Executable created successfully"
+          echo "Executable created successfully"
           ls -la main
-        elif [ -f "main.exe" ]; then
-          echo "✓ Executable created successfully (Windows)"
-          ls -la main.exe
         else
-          echo "✗ No executable found"
+          echo "No executable found"
           exit 1
         fi
     
-    - name: Check for input file
+    - name: Test compilation output (Windows)
+      if: matrix.os == 'windows-latest'
+      shell: pwsh
+      run: |
+        if (Test-Path "main.exe") {
+          Write-Host "Executable created successfully (Windows)"
+          Get-ChildItem main.exe
+        } else {
+          Write-Host "No executable found"
+          exit 1
+        fi
+    
+    - name: Check for input file (Unix)
+      if: matrix.os != 'windows-latest'
       run: |
         if [ -f "CS210_Project_Three_Input_File.txt" ]; then
-          echo "✓ Input file found"
+          echo "Input file found"
           wc -l CS210_Project_Three_Input_File.txt
         else
-          echo "✗ Input file not found"
+          echo "Input file not found"
+          exit 1
+        fi
+    
+    - name: Check for input file (Windows)
+      if: matrix.os == 'windows-latest'
+      shell: pwsh
+      run: |
+        if (Test-Path "CS210_Project_Three_Input_File.txt") {
+          Write-Host "Input file found"
+          (Get-Content "CS210_Project_Three_Input_File.txt").Count
+        } else {
+          Write-Host "Input file not found"
           exit 1
         fi
     
